@@ -342,6 +342,10 @@ contains
 !---------------------
 ! Compute Total Energy
 !---------------------
+      !$ser on
+      !$ser savepoint ComputeTotalEnergy-Sanity
+      !$ser data u=u v=v
+      !$ser off
       if ( (consv_te > 0. .or. idiag%id_te>0)  .and. (.not.do_adiabatic_init) ) then
            call compute_total_energy(is, ie, js, je, isd, ied, jsd, jed, npz,        &
                                      u, v, w, delz, pt, delp, q, dp1, q_con, pe, peln, phis, &
