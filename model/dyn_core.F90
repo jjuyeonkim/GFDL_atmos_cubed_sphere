@@ -21,6 +21,9 @@
 
 module dyn_core_mod
 
+  !$ser verbatim use mpi
+  !$ser verbatim USE m_serialize, ONLY: fs_is_serialization_on
+
 #ifdef OVERLOAD_R4
   use constantsR4_mod,    only: rdgas, cp_air, pi
 #else
@@ -67,6 +70,8 @@ module dyn_core_mod
   use fv_regional_mod,     only: dump_field, exch_uv, H_STAGGER, U_STAGGER, V_STAGGER
   use fv_regional_mod,     only: a_step, p_step, k_step, n_step
   use fast_phys_mod,       only: fast_phys
+
+  !$ser verbatim use k_checkpoint, only: set_k
 
 implicit none
 private
@@ -205,6 +210,13 @@ contains
     integer :: is,  ie,  js,  je
     integer :: isd, ied, jsd, jed
 
+    !$ser verbatim integer :: mpi_rank,ier, nz
+    !$ser verbatim logical :: ser_on, boolean_false, boolean_true
+    !$ser verbatim boolean_false = .false.
+    !$ser verbatim boolean_true = .true.
+    !$ser verbatim call mpi_comm_rank(MPI_COMM_WORLD, mpi_rank,ier)
+    !$ser verbatim ser_on=fs_is_serialization_on()
+
       is  = bd%is
       ie  = bd%ie
       js  = bd%js
@@ -256,18 +268,28 @@ contains
            allocate(    gz(isd:ied, jsd:jed ,npz+1) )
              call init_ijk_mem(isd,ied, jsd,jed, npz+1, gz, huge_r)
            allocate(   pkc(isd:ied, jsd:jed ,npz+1) )
+!$ser verbatim call init_ijk_mem(isd,ied, jsd,jed, npz+1, pkc, 0.)
            allocate(   ptc(isd:ied, jsd:jed ,npz ) )
+!$ser verbatim call init_ijk_mem(isd,ied, jsd,jed, npz, ptc, 0.)
            allocate( crx(is :ie+1, jsd:jed,  npz) )
+!$ser verbatim call init_ijk_mem(is,ie+1, jsd,jed, npz, crx, 0.)
            allocate( xfx(is :ie+1, jsd:jed,  npz) )
+!$ser verbatim call init_ijk_mem(is,ie+1, jsd,jed, npz, xfx, 0.)
            allocate( cry(isd:ied,  js :je+1, npz) )
+!$ser verbatim call init_ijk_mem(isd,ied, js,je+1, npz, cry, 0.)
            allocate( yfx(isd:ied,  js :je+1, npz) )
+!$ser verbatim call init_ijk_mem(isd,ied, js,je+1, npz, yfx, 0.)
            allocate( divgd(isd:ied+1,jsd:jed+1,npz) )
+!$ser verbatim call init_ijk_mem(isd,ied+1, jsd,jed+1, npz, divgd, 0.)
            allocate( delpc(isd:ied, jsd:jed  ,npz  ) )
 !                    call init_ijk_mem(isd,ied, jsd,jed, npz, delpc, 0.)
+!$ser verbatim call init_ijk_mem(isd,ied, jsd,jed, npz, delpc, 0.)
            allocate( ut(isd:ied, jsd:jed, npz) )
 !                    call init_ijk_mem(isd,ied, jsd,jed, npz, ut, 0.)
+!$ser verbatim call init_ijk_mem(isd,ied, jsd,jed, npz, ut, 0.)
            allocate( vt(isd:ied, jsd:jed, npz) )
 !                    call init_ijk_mem(isd,ied, jsd,jed, npz, vt, 0.)
+!$ser verbatim call init_ijk_mem(isd,ied, jsd,jed, npz, vt, 0.)
 
           if ( .not. hydrostatic ) then
                allocate( zh(isd:ied, jsd:jed, npz+1) )
@@ -312,6 +334,11 @@ contains
 !-----------------------------------------------------
   do it=1,n_split
 !-----------------------------------------------------
+     !$ser verbatim if ( it==1 ) then
+     !$ser on
+     !$ser verbatim else
+     !$ser off
+     !$ser verbatim endif
 #ifdef ROT3
      call start_group_halo_update(i_pack(8), u, v, domain, gridtype=DGRID_NE)
 #endif
@@ -653,6 +680,8 @@ contains
 
     endif
 
+    !$ser savepoint D_SW-In
+    !$ser data delpcd=vt delpd=delp ptcd=ptc ptd=pt ud=u vd=v wd=w ucd=uc vcd=vc uad=ua vad=va divgdd=divgd mfxd=mfx mfyd=mfy cxd=cx cyd=cy crxd=crx cryd=cry xfxd=xfx yfxd=yfx q_cond=q_con zhd=zh heat_sourced=heat_source diss_estd=diss_est zvir=zvir nq=nq dt=dt nord_v=nord_v damp_vt=damp_vt
 
     call timing_on('D_SW')
 !$OMP parallel do default(none) shared(npz,flagstruct,nord_v,pfull,damp_vt,hydrostatic,last_step, &
@@ -664,6 +693,7 @@ contains
 !$OMP                          d_con_k,kgb, hord_m, hord_v, hord_t, hord_p, wk, heat_s,   &
 !$OMP                          diss_e, z_rat, k_q_con)
     do k=1,npz
+       !$ser verbatim call set_k(k)
        hord_m = flagstruct%hord_mt
        hord_t = flagstruct%hord_tm
        hord_v = flagstruct%hord_vt
@@ -810,6 +840,10 @@ contains
             enddo
        endif
     enddo           ! end openMP k-loop
+
+    !$ser savepoint D_SW-Out
+    !$ser data delpcd=vt delpd=delp ptcd=ptc ptd=pt ud=u vd=v wd=w ucd=uc vcd=vc uad=ua vad=va divgdd=divgd mfxd=mfx mfyd=mfy cxd=cx cyd=cy crxd=crx cryd=cry xfxd=xfx yfxd=yfx q_cond=q_con heat_sourced=heat_source diss_estd=diss_est nord_vd=nord_v damp_vtd=damp_vt
+    !$ser verbatim call finalize_kbuff()
 
     if (flagstruct%regional) then
        call mpp_update_domains(uc, vc, domain, gridtype=CGRID_NE)
