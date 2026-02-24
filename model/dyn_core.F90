@@ -334,11 +334,6 @@ contains
 !-----------------------------------------------------
   do it=1,n_split
 !-----------------------------------------------------
-     !$ser verbatim if ( it==1 ) then
-     !$ser on
-     !$ser verbatim else
-     !$ser off
-     !$ser verbatim endif
 #ifdef ROT3
      call start_group_halo_update(i_pack(8), u, v, domain, gridtype=DGRID_NE)
 #endif
@@ -679,7 +674,7 @@ contains
       endif
 
     endif
-
+    !$ser on
     !$ser savepoint D_SW-In
     !$ser data delpcd=vt delpd=delp ptcd=ptc ptd=pt ud=u vd=v wd=w ucd=uc vcd=vc uad=ua vad=va divgdd=divgd mfxd=mfx mfyd=mfy cxd=cx cyd=cy crxd=crx cryd=cry xfxd=xfx yfxd=yfx q_cond=q_con zhd=zh heat_sourced=heat_source diss_estd=diss_est zvir=zvir nq=nq dt=dt nord_v=nord_v damp_vt=damp_vt
 
@@ -844,7 +839,7 @@ contains
     !$ser savepoint D_SW-Out
     !$ser data delpcd=vt delpd=delp ptcd=ptc ptd=pt ud=u vd=v wd=w ucd=uc vcd=vc uad=ua vad=va divgdd=divgd mfxd=mfx mfyd=mfy cxd=cx cyd=cy crxd=crx cryd=cry xfxd=xfx yfxd=yfx q_cond=q_con heat_sourced=heat_source diss_estd=diss_est nord_vd=nord_v damp_vtd=damp_vt
     !$ser verbatim call finalize_kbuff()
-
+    !$ser off
     if (flagstruct%regional) then
        call mpp_update_domains(uc, vc, domain, gridtype=CGRID_NE)
        call mpp_update_domains(u , v , domain, gridtype=DGRID_NE)
