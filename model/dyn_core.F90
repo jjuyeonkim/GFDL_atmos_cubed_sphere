@@ -655,7 +655,7 @@ contains
     !$ser verbatim if ( it==1 ) then
     !$ser on
     !$ser savepoint D_SW-In
-    !$ser data delpcd=vt delpd=delp ptd=pt ud=u vd=v wd=w ucd=uc vcd=vc divgdd=divgd mfxd=mfx mfyd=mfy cxd=cx cyd=cy crxd=crx cryd=cry xfxd=xfx yfxd=yfx q_cond=q_con zhd=zh heat_sourced=heat_source diss_estd=diss_est zvir=zvir nq=nq dt=dt nord_v=nord_v damp_vt=damp_vt
+    !$ser data delpcd=vt delpd=delp ptd=pt ud=u vd=v wd=w ucd=uc vcd=vc divgdd=divgd mfxd=mfx mfyd=mfy cxd=cx cyd=cy crxd=crx cryd=cry xfxd=xfx yfxd=yfx q_cond=q_con zhd=zh heat_sourced=heat_source diss_estd=diss_est zvir=zvir nq=nq dt=dt damp_vt=damp_vt
     !$ser off
     !$ser verbatim end if
 
@@ -819,7 +819,7 @@ contains
     !$ser verbatim if ( it==1 ) then
     !$ser on
     !$ser savepoint D_SW-Out
-    !$ser data delpcd=vt delpd=delp ptd=pt ud=u vd=v wd=w ucd=uc vcd=vc divgdd=divgd mfxd=mfx mfyd=mfy cxd=cx cyd=cy crxd=crx cryd=cry xfxd=xfx yfxd=yfx q_cond=q_con heat_sourced=heat_source diss_estd=diss_est nord_vd=nord_v damp_vtd=damp_vt
+    !$ser data delpcd=vt delpd=delp ptd=pt ud=u vd=v wd=w ucd=uc vcd=vc divgdd=divgd mfxd=mfx mfyd=mfy cxd=cx cyd=cy crxd=crx cryd=cry xfxd=xfx yfxd=yfx q_cond=q_con heat_sourced=heat_source diss_estd=diss_est damp_vtd=damp_vt
     !$ser off
     !$ser verbatim end if
     if (flagstruct%regional) then
