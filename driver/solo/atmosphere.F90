@@ -84,6 +84,11 @@ integer :: mygrid = 1 !not used yet
 integer, allocatable :: pelist(:)
 integer :: axes(4)
 integer:: isd, ied, jsd, jed, ngc
+
+!$ser verbatim integer :: o3mr, sgs_tke
+!$ser verbatim character(len=256) :: ser_env, ser_input_only_str
+!$ser verbatim logical :: serialize_only_driver_input, serialize_driver, serialize_dycore, serialize_physics, serialize_init, save_step, ser_input_only
+!$ser verbatim integer, save :: driver_savepoints_saved = 0
 !-----------------------------------------------------------------------
 
 ! version number of this module
@@ -421,7 +426,7 @@ contains
        !$ser on
        !$ser savepoint Grid-Info
        !$ser data is_=Atm(n)%bd%is ie=Atm(n)%bd%ie isd=Atm(n)%bd%isd ied=Atm(n)%bd%ied js=Atm(n)%bd%js je=Atm(n)%bd%je jsd=Atm(n)%bd%jsd jed=Atm(n)%bd%jed
-       !$ser data npx=npx npy=npy npz=npz nested=Atm(n)%gridstruct%nested grid_type=Atm(n)%gridstruct%grid_type dya=Atm(n)%gridstruct%dya
+       !$ser data npx=Atm(n)%npx npy=Atm(n)%npy npz=Atm(n)%npz nested=Atm(n)%gridstruct%nested grid_type=Atm(n)%gridstruct%grid_type dya=Atm(n)%gridstruct%dya
        !$ser data dxa=Atm(n)%gridstruct%dxa dxc=Atm(n)%gridstruct%dxc dyc=Atm(n)%gridstruct%dyc rdxc=Atm(n)%gridstruct%rdxc rdx=Atm(n)%gridstruct%rdx
        !$ser data rdyc=Atm(n)%gridstruct%rdyc  rdxa=Atm(n)%gridstruct%rdxa  rdya=Atm(n)%gridstruct%rdya rdy=Atm(n)%gridstruct%rdy
        !$ser data cosa_u=Atm(n)%gridstruct%cosa_u cosa_v=Atm(n)%gridstruct%cosa_v  cosa_s=Atm(n)%gridstruct%cosa_s sina_v=Atm(n)%gridstruct%sina_v
@@ -432,8 +437,6 @@ contains
        !$ser data da_min_c=Atm(n)%gridstruct%da_min_c del6_u=Atm(n)%gridstruct%del6_u del6_v=Atm(n)%gridstruct%del6_v f0=Atm(n)%gridstruct%f0
        !$ser data divg_u=Atm(n)%gridstruct%divg_u divg_v=Atm(n)%gridstruct%divg_v stretched_grid=Atm(n)%gridstruct%stretched_grid
        !$ser data agrid1=Atm(n)%gridstruct%agrid(:,:,1) agrid2=Atm(n)%gridstruct%agrid(:,:,2) bgrid1=Atm(n)%gridstruct%grid(:,:,1)
-       !$ser data bgrid2=Atm(n)%gridstruct%grid(:,:,2) edge_w=Atm(n)%gridstruct%edge_w(jsc:jec+1) edge_e=Atm(n)%gridstruct%edge_e(jsc:jec+1)
-       !$ser data edge_s=Atm(n)%gridstruct%edge_s(isc:iec+1) edge_n=Atm(n)%gridstruct%edge_n(isc:iec+1) a11=Atm(n)%gridstruct%a11
        !$ser data a12=Atm(n)%gridstruct%a12  a21=Atm(n)%gridstruct%a21  a22=Atm(n)%gridstruct%a22 ak=Atm(n)%ak bk=Atm(n)%bk ptop=Atm(n)%ptop ks=Atm(n)%ks
        !$ser data ee1=Atm(n)%gridstruct%ee1 ee2=Atm(n)%gridstruct%ee2 ew1=Atm(n)%gridstruct%ew(:,:,:,1) ew2=Atm(n)%gridstruct%ew(:,:,:,2)
        !$ser data  es1=Atm(n)%gridstruct%es(:,:,:,1) es2=Atm(n)%gridstruct%es(:,:,:,2)
