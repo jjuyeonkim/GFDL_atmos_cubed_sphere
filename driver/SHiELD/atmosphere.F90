@@ -559,6 +559,8 @@ if ( is_master() ) write(*,*) 'CALL atmos_global_diag_init'
        !$ser data da_min_c=Atm(n)%gridstruct%da_min_c del6_u=Atm(n)%gridstruct%del6_u del6_v=Atm(n)%gridstruct%del6_v f0=Atm(n)%gridstruct%f0
        !$ser data divg_u=Atm(n)%gridstruct%divg_u divg_v=Atm(n)%gridstruct%divg_v stretched_grid=Atm(n)%gridstruct%stretched_grid
        !$ser data agrid1=Atm(n)%gridstruct%agrid(:,:,1) agrid2=Atm(n)%gridstruct%agrid(:,:,2) bgrid1=Atm(n)%gridstruct%grid(:,:,1)
+       !$ser data bgrid2=Atm(n)%gridstruct%grid(:,:,2) edge_w=Atm(n)%gridstruct%edge_w(jsc:jec+1) edge_e=Atm(n)%gridstruct%edge_e(jsc:jec+1)
+       !$ser data edge_s=Atm(n)%gridstruct%edge_s(isc:iec+1) edge_n=Atm(n)%gridstruct%edge_n(isc:iec+1) a11=Atm(n)%gridstruct%a11
        !$ser data a12=Atm(n)%gridstruct%a12  a21=Atm(n)%gridstruct%a21  a22=Atm(n)%gridstruct%a22 ak=Atm(n)%ak bk=Atm(n)%bk ptop=Atm(n)%ptop ks=Atm(n)%ks
        !$ser data ee1=Atm(n)%gridstruct%ee1 ee2=Atm(n)%gridstruct%ee2 ew1=Atm(n)%gridstruct%ew(:,:,:,1) ew2=Atm(n)%gridstruct%ew(:,:,:,2)
        !$ser data  es1=Atm(n)%gridstruct%es(:,:,:,1) es2=Atm(n)%gridstruct%es(:,:,:,2)
