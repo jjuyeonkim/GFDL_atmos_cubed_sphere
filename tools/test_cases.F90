@@ -1513,13 +1513,13 @@
          phis = 0.0
 
          !$ser savepoint Aquaplanet-In
-         !$ser data ps=ps delp=delp delz=delz pt=pt phis=phis u=u, v=v, w=w, sphum=sphum
+         !$ser data ps=ps delp=delp delz=delz pt=pt phis=phis u=u v=v w=w sphum=sphum
 
          call hydro_eq(npz, is, ie, js, je, ps, phis, 1.E5,      &
                        delp, ak, bk, pt, delz, area, ng, .false., hydrostatic, hybrid_z, domain)
 
          !$ser savepoint Aquaplanet-Out
-         !$ser data qvapor=q(:,:,:,sphum) ps=ps delp=delp delz=delz pt=pt phis=phis u=u, v=v, w=w, sphum=sphum
+         !$ser data qvapor=q(:,:,:,sphum) ps=ps delp=delp delz=delz pt=pt phis=phis u=u v=v w=w sphum=sphum
 
        else
 ! Initialize topography
