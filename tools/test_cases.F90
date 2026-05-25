@@ -1636,7 +1636,11 @@
          
     !$ser savepoint InitPreJab-Out
     !$ser data ps=ps delp=delp pe=pe peln=peln pk=pk pkz=pkz eta=eta eta_v=eta_v 
-    !$ser savepoint JablonowskiBaroclinic-In
+    !$ser verbatim if (test_case==12) then
+        !$ser savepoint JablonowskiBaroclinicSteady-In
+    !$ser verbatim else if (test_case==13) then
+        !$ser savepoint JablonowskiBaroclinicInstability-In
+    !$ser verbatim endif
     !$ser data ps=ps delp=delp pe=pe peln=peln pk=pk pkz=pkz eta=eta eta_v=eta_v  ptop=ptop
          
     if ( .not. adiabatic ) then
@@ -1903,8 +1907,12 @@
             write(stdout(), *) 'PI:', pi
             write(stdout(), *) 'PHIS:', mpp_chksum(phis(is:ie,js:je))
          endif
-         
-         !$ser savepoint JablonowskiBaroclinic-Out
+
+         !$ser verbatim if (test_case==12) then
+             !$ser savepoint JablonowskiBaroclinicSteady-Out
+         !$ser verbatim else if (test_case==13) then
+             !$ser savepoint JablonowskiBaroclinicInstability-Out
+         !$ser verbatim endif
          !$ser data qvapor=q(:,:,:,sphum) pt=pt delz=delz w=w phis=phis u=u v=v utmpi=utmp vtmpi=vtmp eta=eta press=press
 
       else if ( (test_case==-12) .or. (test_case==-13) ) then
