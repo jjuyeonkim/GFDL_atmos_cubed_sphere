@@ -1500,6 +1500,7 @@
 
       if (test_case==10 .or. test_case==14) then
 
+         !$ser verbatim sphum = get_tracer_index (MODEL_ATMOS, 'sphum')
          !$ser savepoint Aquaplanet-In
          !$ser data qvapor=q(:,:,:,sphum) ps=ps delp=delp delz=delz pt=pt phis=phis u=u v=v w=w
 
@@ -1636,13 +1637,13 @@
          
     !$ser savepoint InitPreJab-Out
     !$ser data ps=ps delp=delp pe=pe peln=peln pk=pk pkz=pkz eta=eta eta_v=eta_v 
+
     !$ser verbatim if (test_case==12) then
         !$ser savepoint JablonowskiBaroclinicSteady-In
     !$ser verbatim else if (test_case==13) then
         !$ser savepoint JablonowskiBaroclinicInstability-In
     !$ser verbatim endif
-    !$ser data ps=ps delp=delp pe=pe peln=peln pk=pk pkz=pkz eta=eta eta_v=eta_v  ptop=ptop
-         
+    !$ser data qvapor=q(:,:,:,sphum) delp=delp delz=delz eta=eta eta_v=eta_v ps=ps pt=pt pe=pe peln=peln phis=phis pk=pk pkz=pkz u=u v=v w=w utmpi=utmp vtmpi=vtmp press=press ptop=ptop
     if ( .not. adiabatic ) then
     !Set up moisture
          sphum = get_tracer_index (MODEL_ATMOS, 'sphum')
@@ -1913,8 +1914,7 @@
          !$ser verbatim else if (test_case==13) then
              !$ser savepoint JablonowskiBaroclinicInstability-Out
          !$ser verbatim endif
-         !$ser data qvapor=q(:,:,:,sphum) pt=pt delz=delz w=w phis=phis u=u v=v utmpi=utmp vtmpi=vtmp eta=eta press=press
-
+         !$ser data qvapor=q(:,:,:,sphum) delp=delp delz=delz eta=eta eta_v=eta_v ps=ps pt=pt pe=pe peln=peln phis=phis pk=pk pkz=pkz u=u v=v w=w utmpi=utmp vtmpi=vtmp press=press ptop=ptop
       else if ( (test_case==-12) .or. (test_case==-13) ) then
 
          call DCMIP16_BC(delp,pt,u,v,q,w,delz, &
